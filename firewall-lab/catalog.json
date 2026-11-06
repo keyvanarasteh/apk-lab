@@ -4,11 +4,11 @@
     "companies": 12,
     "branches": 48,
     "firewalls": 51,
-    "rules": 410,
+    "rules": 439,
     "priceUsd": {
       "min": 700,
-      "max": 12000,
-      "total": 18399
+      "max": 205357,
+      "total": 244626
     },
     "chosenByVendor": {
       "Fortinet": 30,
@@ -1902,13 +1902,13 @@
       "product": "Fortinet FortiGate 400F",
       "vendor": "Fortinet",
       "throughputGbps": 9.0,
-      "priceUsd": null,
-      "ruleCount": 13,
+      "priceUsd": 12696,
+      "ruleCount": 24,
       "actions": {
-        "allow": 10,
-        "deny": 2,
+        "allow": 19,
+        "deny": 3,
         "reject": 0,
-        "limit": 1
+        "limit": 2
       },
       "alternativesCount": 4,
       "alternatives": [
@@ -1916,25 +1916,25 @@
           "product": "Cisco Secure Firewall 3110",
           "vendor": "Cisco",
           "throughputGbps": 17.0,
-          "priceUsd": null
+          "priceUsd": 41524
         },
         {
           "product": "Sophos XGS 5500",
           "vendor": "Sophos",
           "throughputGbps": 12.4,
-          "priceUsd": null
+          "priceUsd": 19399
         },
         {
           "product": "Palo Alto PA-3410",
           "vendor": "Palo Alto Networks",
-          "throughputGbps": 7.5,
-          "priceUsd": null
+          "throughputGbps": 5.9,
+          "priceUsd": 32584
         },
         {
           "product": "Check Point Quantum 6600",
           "vendor": "Check Point",
           "throughputGbps": 3.7,
-          "priceUsd": null
+          "priceUsd": 39332
         }
       ]
     },
@@ -1951,11 +1951,11 @@
       "product": "Fortinet FortiGate 200F",
       "vendor": "Fortinet",
       "throughputGbps": 3.0,
-      "priceUsd": null,
-      "ruleCount": 10,
+      "priceUsd": 4087,
+      "ruleCount": 16,
       "actions": {
-        "allow": 6,
-        "deny": 3,
+        "allow": 11,
+        "deny": 4,
         "reject": 0,
         "limit": 1
       },
@@ -1965,25 +1965,25 @@
           "product": "Cisco Secure Firewall 3105",
           "vendor": "Cisco",
           "throughputGbps": 10.0,
-          "priceUsd": null
+          "priceUsd": 19836
         },
         {
           "product": "Sophos XGS 4500",
           "vendor": "Sophos",
           "throughputGbps": 8.4,
-          "priceUsd": null
+          "priceUsd": 12554
         },
         {
           "product": "Palo Alto PA-1410",
           "vendor": "Palo Alto Networks",
-          "throughputGbps": 4.5,
-          "priceUsd": null
+          "throughputGbps": 3.3,
+          "priceUsd": 11664
         },
         {
           "product": "Check Point Quantum 3800",
           "vendor": "Check Point",
           "throughputGbps": 1.5,
-          "priceUsd": null
+          "priceUsd": 12199
         }
       ]
     },
@@ -2000,11 +2000,11 @@
       "product": "Fortinet FortiGate 200F",
       "vendor": "Fortinet",
       "throughputGbps": 3.0,
-      "priceUsd": null,
-      "ruleCount": 9,
+      "priceUsd": 4087,
+      "ruleCount": 15,
       "actions": {
-        "allow": 5,
-        "deny": 3,
+        "allow": 10,
+        "deny": 4,
         "reject": 0,
         "limit": 1
       },
@@ -2014,25 +2014,25 @@
           "product": "Cisco Secure Firewall 3105",
           "vendor": "Cisco",
           "throughputGbps": 10.0,
-          "priceUsd": null
+          "priceUsd": 19836
         },
         {
           "product": "Sophos XGS 4500",
           "vendor": "Sophos",
           "throughputGbps": 8.4,
-          "priceUsd": null
+          "priceUsd": 12554
         },
         {
           "product": "Palo Alto PA-1410",
           "vendor": "Palo Alto Networks",
-          "throughputGbps": 4.5,
-          "priceUsd": null
+          "throughputGbps": 3.3,
+          "priceUsd": 11664
         },
         {
           "product": "Check Point Quantum 3800",
           "vendor": "Check Point",
           "throughputGbps": 1.5,
-          "priceUsd": null
+          "priceUsd": 12199
         }
       ]
     },
@@ -2049,11 +2049,11 @@
       "product": "Fortinet FortiGate 3500F",
       "vendor": "Fortinet",
       "throughputGbps": 63.0,
-      "priceUsd": null,
-      "ruleCount": 12,
+      "priceUsd": 205357,
+      "ruleCount": 18,
       "actions": {
-        "allow": 6,
-        "deny": 5,
+        "allow": 11,
+        "deny": 6,
         "reject": 0,
         "limit": 1
       },
@@ -2063,25 +2063,25 @@
           "product": "Cisco Secure Firewall 4225",
           "vendor": "Cisco",
           "throughputGbps": 90.0,
-          "priceUsd": null
+          "priceUsd": 241544
         },
         {
           "product": "Palo Alto PA-5420",
           "vendor": "Palo Alto Networks",
           "throughputGbps": 50.0,
-          "priceUsd": null
+          "priceUsd": 142343
         },
         {
           "product": "Sophos XGS 8500",
           "vendor": "Sophos",
           "throughputGbps": 34.0,
-          "priceUsd": null
+          "priceUsd": 70956
         },
         {
           "product": "Check Point Quantum Force 9700",
           "vendor": "Check Point",
           "throughputGbps": 16.6,
-          "priceUsd": null
+          "priceUsd": 75851
         }
       ]
     },

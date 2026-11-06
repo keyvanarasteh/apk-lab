@@ -7,7 +7,7 @@
     "course": "BGT207",
     "github": "denizpekova"
   },
-  "summary": "A fictional group with Istanbul HQ (data center, VPN hub, NOC/SOC), Ankara (government projects, backup NOC/SOC), London (UK-GDPR) and a 10,000-student academic branch, about 11,600 people in total. Bandwidth is computed with an explicit formula (x1.10 overhead, x1.35 growth), FortiGate HA pairs per site chosen from a top-5 with a capacity filter, per-site ordered rules ending in deny-all, and a NOC/SOC split with change control.",
+  "summary": "A fictional group with Istanbul HQ (data center, public website behind Cloudflare WAF, VPN hub, NOC/SOC), Ankara (government projects, backup NOC/SOC), London (UK-GDPR) and a 10,000-student academic branch, about 11,600 people in total. Bandwidth is computed with an explicit formula (x1.10 overhead, x1.35 growth), FortiGate HA pairs per site chosen from a top-5 with a capacity filter, per-site ordered rules ending in deny-all, and a NOC/SOC split with change control.",
   "branches": [
     {
       "id": "istanbul-hq",
@@ -51,7 +51,8 @@
           {
             "id": 60,
             "name": "servers",
-            "cidr": "10.10.60.0/24"
+            "cidr": "10.10.60.0/24",
+            "note": "Infrastructure server 10.10.60.5 gives DHCP, DNS and NTP."
           },
           {
             "id": 70,
@@ -67,7 +68,8 @@
           {
             "id": 90,
             "name": "dmz",
-            "cidr": "10.10.90.0/24"
+            "cidr": "10.10.90.0/24",
+            "note": "Public website origin 10.10.90.10, reachable only through Cloudflare. No connections from the DMZ into internal networks."
           }
         ]
       },
@@ -77,7 +79,8 @@
         "drivers": [
           "data center and VPN 1,200 Mbps",
           "guest 60 Mbps",
-          "software and R&D traffic"
+          "software and R&D traffic",
+          "public website through Cloudflare"
         ]
       },
       "firewalls": [
@@ -87,6 +90,7 @@
             "product": "Fortinet FortiGate 400F",
             "vendor": "Fortinet",
             "throughputGbps": 9.0,
+            "priceUsd": 12696,
             "reason": "Selected. Enough headroom on a 5 Gbps link; manages and logs all four sites"
           },
           "alternatives": [
@@ -94,38 +98,99 @@
               "product": "Cisco Secure Firewall 3110",
               "vendor": "Cisco",
               "throughputGbps": 17.0,
+              "priceUsd": 41524,
               "reason": "Qualifies. Talos threat intelligence; needs the separate FMC manager"
             },
             {
               "product": "Sophos XGS 5500",
               "vendor": "Sophos",
               "throughputGbps": 12.4,
+              "priceUsd": 19399,
               "reason": "Qualifies. Simple to operate; weaker for central multi-site operations"
             },
             {
               "product": "Palo Alto PA-3410",
               "vendor": "Palo Alto Networks",
-              "throughputGbps": 7.5,
+              "throughputGbps": 5.9,
+              "priceUsd": 32584,
               "reason": "Qualifies. Strong App-ID and Panorama; little headroom at the low figure"
             },
             {
               "product": "Check Point Quantum 6600",
               "vendor": "Check Point",
               "throughputGbps": 3.7,
+              "priceUsd": 39332,
               "reason": "Eliminated. Below 5 Gbps"
             }
           ],
           "rules": [
             {
-              "action": "allow",
+              "action": "deny",
               "direction": "forward",
-              "from": "Internet",
-              "to": "DMZ web portal 10.10.90.10",
-              "note": "Rule 1: Internet to DMZ web portal `10.10.90.10` (HTTPS) — Allow, with IPS and WAF."
+              "proto": "any",
+              "from": "Internet with a private source address",
+              "to": "Site networks",
+              "note": "Common rule A: a private source address cannot arrive from the internet, so it is spoofed. Without this rule a spoofed packet could match the internal allow rules below."
             },
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "udp",
+              "port": "500,4500",
+              "from": "Ankara, London and campus firewalls",
+              "to": "IPsec gateway on this firewall",
+              "note": "Common rule B: IKEv2 and NAT traversal for the site-to-site tunnels. Without it the sites lose their private links."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "udp",
+              "port": "67:68",
+              "from": "All site VLANs",
+              "to": "Infrastructure server 10.10.60.5",
+              "note": "Common rule C: the firewall relays DHCP to this server. Without it deny-all leaves clients with no IP address. Guests reach this server for DHCP and DNS only."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "53",
+              "from": "All site VLANs",
+              "to": "Infrastructure server 10.10.60.5",
+              "note": "Common rule D: DNS to the site resolver. Without it names stop resolving and every application appears to be down."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "udp",
+              "port": "123",
+              "from": "All site VLANs except guest",
+              "to": "Infrastructure server 10.10.60.5",
+              "note": "Common rule E: NTP from the site time source. Without it clocks drift, TLS checks fail and log timestamps stop being usable as evidence."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "53,123",
+              "from": "Infrastructure server 10.10.60.5",
+              "to": "Internet",
+              "note": "Common rule F: only this server resolves names and fetches time upstream, so a single source is easy to monitor."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "tcp",
+              "port": "443",
+              "from": "Cloudflare IP ranges",
+              "to": "DMZ website 10.10.90.10",
+              "note": "Rule 1: only Cloudflare reaches the public website (HTTPS), after its WAF, and IPS inspects it again here. Without the source limit an attacker who finds the origin address could skip the WAF."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "22,443,161",
               "from": "NOC networks (Istanbul, Ankara)",
               "to": "Network management VLAN",
               "note": "Rule 2: NOC networks (Istanbul, Ankara) to Network management VLAN (SSH, HTTPS, SNMPv3) — Allow."
@@ -133,6 +198,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "any",
+              "port": "514,6514",
               "from": "All sites",
               "to": "FortiAnalyzer and SIEM",
               "note": "Rule 3: All sites to FortiAnalyzer and SIEM (Syslog 514, 6514) — Allow."
@@ -140,6 +207,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "443,9200",
               "from": "Security VLANs (Istanbul, Ankara)",
               "to": "FortiAnalyzer and SIEM",
               "note": "Rule 4: Security VLANs (Istanbul, Ankara) to FortiAnalyzer and SIEM (HTTPS, 9200) — Allow."
@@ -147,6 +216,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "22,443",
               "from": "Software VLANs (all sites)",
               "to": "Git and CI/CD 10.10.60.40/29",
               "note": "Rule 5: Software VLANs (all sites) to Git and CI/CD `10.10.60.40/29` (SSH, HTTPS) — Allow."
@@ -154,6 +225,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "22,443,8888",
               "from": "R&D VLANs (Istanbul, Ankara, campus)",
               "to": "GPU cluster 10.10.60.64/27",
               "note": "Rule 6: R&D VLANs (Istanbul, Ankara, campus) to GPU cluster `10.10.60.64/27` (SSH, HTTPS, 8888) — Allow."
@@ -161,6 +234,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "443",
               "from": "Admin VLANs (all sites)",
               "to": "ERP 10.10.60.10",
               "note": "Rule 7: Admin VLANs (all sites) to ERP `10.10.60.10` (HTTPS) — Allow."
@@ -175,6 +250,8 @@
             {
               "action": "limit",
               "direction": "forward",
+              "proto": "any",
+              "port": "53,80,443",
               "from": "Guest VLAN",
               "to": "Internet",
               "note": "Rule 9: Guest VLAN to Internet (DNS, HTTP, HTTPS) — Allow, rate limited."
@@ -182,6 +259,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "any",
+              "port": "53,80,443",
               "from": "Corporate VLANs",
               "to": "Internet",
               "note": "Rule 10: Corporate VLANs to Internet (DNS, HTTP, HTTPS) — Allow, with filtering."
@@ -189,6 +268,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "any",
+              "port": "443,514,873",
               "from": "Servers VLAN",
               "to": "Ankara DR servers",
               "note": "Rule 11: Servers VLAN to Ankara DR servers (HTTPS, 514, rsync) — Allow."
@@ -196,16 +277,61 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "any",
+              "port": "22,443,161",
               "from": "Istanbul NOC",
               "to": "Network management VLANs at the other sites",
               "note": "Rule 12: Istanbul NOC to Network management VLANs at the other sites (SSH, HTTPS, SNMPv3) — Allow."
             },
             {
+              "action": "limit",
+              "direction": "forward",
+              "proto": "udp",
+              "port": "500,4500",
+              "from": "Internet",
+              "to": "Remote-access gateway on the Istanbul firewall",
+              "note": "Rule 13: role-based VPN logins from the internet, rate limited against password spraying. Certificate and MFA are required."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "22,443,161",
+              "from": "VPN admin pool 10.10.100.0/26",
+              "to": "Network management VLANs (all sites)",
+              "note": "Rule 14: firewall engineers only, through the VPN and never from the internet directly (SSH, HTTPS, SNMPv3)."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "tcp",
+              "port": "22,443",
+              "from": "VPN developer pool 10.10.100.64/26",
+              "to": "Git and CI/CD 10.10.60.40/29",
+              "note": "Rule 15: remote developers reach Git and CI/CD only, so a stolen developer login cannot reach ERP or management."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "tcp",
+              "port": "443",
+              "from": "VPN staff pool 10.10.100.128/25",
+              "to": "ERP 10.10.60.10",
+              "note": "Rule 16: remote staff reach ERP only (HTTPS)."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "tcp",
+              "port": "22",
+              "from": "CI/CD 10.10.60.40/29",
+              "to": "DMZ website 10.10.90.10",
+              "note": "Rule 17: only CI/CD deploys the website. The connection starts from inside, so the DMZ still cannot start connections to the LAN."
+            },
+            {
               "action": "deny",
               "direction": "forward",
               "proto": "any",
-              "from": "any",
-              "to": "any",
               "note": "Every site ends with deny all and log."
             }
           ]
@@ -254,7 +380,8 @@
           {
             "id": 60,
             "name": "servers",
-            "cidr": "10.20.60.0/24"
+            "cidr": "10.20.60.0/24",
+            "note": "Infrastructure server 10.20.60.5 gives DHCP, DNS and NTP."
           },
           {
             "id": 70,
@@ -290,6 +417,7 @@
             "product": "Fortinet FortiGate 200F",
             "vendor": "Fortinet",
             "throughputGbps": 3.0,
+            "priceUsd": 4087,
             "reason": "Selected. Same FortiOS as HQ, so Ankara can take over as the backup site"
           },
           "alternatives": [
@@ -297,31 +425,90 @@
               "product": "Cisco Secure Firewall 3105",
               "vendor": "Cisco",
               "throughputGbps": 10.0,
+              "priceUsd": 19836,
               "reason": "Qualifies. More capacity than these sites need; adds FMC management"
             },
             {
               "product": "Sophos XGS 4500",
               "vendor": "Sophos",
               "throughputGbps": 8.4,
+              "priceUsd": 12554,
               "reason": "Qualifies. Simple to operate; separate from the HQ management platform"
             },
             {
               "product": "Palo Alto PA-1410",
               "vendor": "Palo Alto Networks",
-              "throughputGbps": 4.5,
+              "throughputGbps": 3.3,
+              "priceUsd": 11664,
               "reason": "Qualifies. Strong application control; higher expected licence cost"
             },
             {
               "product": "Check Point Quantum 3800",
               "vendor": "Check Point",
               "throughputGbps": 1.5,
+              "priceUsd": 12199,
               "reason": "Eliminated. Below 2 Gbps"
             }
           ],
           "rules": [
             {
+              "action": "deny",
+              "direction": "forward",
+              "proto": "any",
+              "from": "Internet with a private source address",
+              "to": "Site networks",
+              "note": "Common rule A: a private source address cannot arrive from the internet, so it is spoofed. Without this rule a spoofed packet could match the internal allow rules below."
+            },
+            {
               "action": "allow",
               "direction": "forward",
+              "proto": "udp",
+              "port": "500,4500",
+              "from": "Istanbul firewall",
+              "to": "IPsec gateway on this firewall",
+              "note": "Common rule B: IKEv2 and NAT traversal for the site-to-site tunnels. Without it the sites lose their private links."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "udp",
+              "port": "67:68",
+              "from": "All site VLANs",
+              "to": "Infrastructure server 10.20.60.5",
+              "note": "Common rule C: the firewall relays DHCP to this server. Without it deny-all leaves clients with no IP address. Guests reach this server for DHCP and DNS only."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "53",
+              "from": "All site VLANs",
+              "to": "Infrastructure server 10.20.60.5",
+              "note": "Common rule D: DNS to the site resolver. Without it names stop resolving and every application appears to be down."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "udp",
+              "port": "123",
+              "from": "All site VLANs except guest",
+              "to": "Infrastructure server 10.20.60.5",
+              "note": "Common rule E: NTP from the site time source. Without it clocks drift, TLS checks fail and log timestamps stop being usable as evidence."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "53,123",
+              "from": "Infrastructure server 10.20.60.5",
+              "to": "Internet",
+              "note": "Common rule F: only this server resolves names and fetches time upstream, so a single source is easy to monitor."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "22,443,161",
               "from": "NOC networks",
               "to": "Network management VLAN",
               "note": "Rule 1: NOC networks to Network management VLAN (SSH, HTTPS, SNMPv3) — Allow."
@@ -329,6 +516,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "any",
+              "port": "443,514,873",
               "from": "Istanbul servers (VPN)",
               "to": "DR servers",
               "note": "Rule 2: Istanbul servers (VPN) to DR servers (HTTPS, 514, rsync) — Allow."
@@ -336,6 +525,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "443,8443",
               "from": "Software VLAN",
               "to": "Government DMZ",
               "note": "Rule 3: Software VLAN to Government DMZ (HTTPS, 8443) — Allow."
@@ -357,6 +548,8 @@
             {
               "action": "limit",
               "direction": "forward",
+              "proto": "any",
+              "port": "53,80,443",
               "from": "Guest VLAN",
               "to": "Internet",
               "note": "Rule 6: Guest VLAN to Internet (DNS, HTTP, HTTPS) — Allow, rate limited."
@@ -364,6 +557,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "any",
+              "port": "53,80,443",
               "from": "Corporate VLANs",
               "to": "Internet",
               "note": "Rule 7: Corporate VLANs to Internet (DNS, HTTP, HTTPS) — Allow, with filtering."
@@ -371,6 +566,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "22,443",
               "from": "Corporate VLANs",
               "to": "Istanbul servers (VPN)",
               "note": "Rule 8: Corporate VLANs to Istanbul servers (VPN) (SSH, HTTPS) — Allow."
@@ -378,6 +575,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "any",
+              "port": "22,443,161",
               "from": "Ankara backup NOC",
               "to": "Network management VLANs at the other sites",
               "note": "Rule 9: Ankara backup NOC to Network management VLANs at the other sites (SSH, HTTPS, SNMPv3) — Allow."
@@ -386,8 +585,6 @@
               "action": "deny",
               "direction": "forward",
               "proto": "any",
-              "from": "any",
-              "to": "any",
               "note": "Every site ends with deny all and log."
             }
           ]
@@ -437,7 +634,7 @@
             "id": 60,
             "name": "servers",
             "cidr": "10.150.60.0/24",
-            "note": "UK HR/CRM server must not send personal data outside the UK."
+            "note": "UK HR/CRM server must not send personal data outside the UK. Infrastructure server 10.150.60.5 gives DHCP, DNS and NTP."
           },
           {
             "id": 70,
@@ -468,6 +665,7 @@
             "product": "Fortinet FortiGate 200F",
             "vendor": "Fortinet",
             "throughputGbps": 3.0,
+            "priceUsd": 4087,
             "reason": "Selected. Same FortiOS as HQ, so Ankara can take over as the backup site"
           },
           "alternatives": [
@@ -475,31 +673,90 @@
               "product": "Cisco Secure Firewall 3105",
               "vendor": "Cisco",
               "throughputGbps": 10.0,
+              "priceUsd": 19836,
               "reason": "Qualifies. More capacity than these sites need; adds FMC management"
             },
             {
               "product": "Sophos XGS 4500",
               "vendor": "Sophos",
               "throughputGbps": 8.4,
+              "priceUsd": 12554,
               "reason": "Qualifies. Simple to operate; separate from the HQ management platform"
             },
             {
               "product": "Palo Alto PA-1410",
               "vendor": "Palo Alto Networks",
-              "throughputGbps": 4.5,
+              "throughputGbps": 3.3,
+              "priceUsd": 11664,
               "reason": "Qualifies. Strong application control; higher expected licence cost"
             },
             {
               "product": "Check Point Quantum 3800",
               "vendor": "Check Point",
               "throughputGbps": 1.5,
+              "priceUsd": 12199,
               "reason": "Eliminated. Below 2 Gbps"
             }
           ],
           "rules": [
             {
+              "action": "deny",
+              "direction": "forward",
+              "proto": "any",
+              "from": "Internet with a private source address",
+              "to": "Site networks",
+              "note": "Common rule A: a private source address cannot arrive from the internet, so it is spoofed. Without this rule a spoofed packet could match the internal allow rules below."
+            },
+            {
               "action": "allow",
               "direction": "forward",
+              "proto": "udp",
+              "port": "500,4500",
+              "from": "Istanbul firewall",
+              "to": "IPsec gateway on this firewall",
+              "note": "Common rule B: IKEv2 and NAT traversal for the site-to-site tunnels. Without it the sites lose their private links."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "udp",
+              "port": "67:68",
+              "from": "All site VLANs",
+              "to": "Infrastructure server 10.150.60.5",
+              "note": "Common rule C: the firewall relays DHCP to this server. Without it deny-all leaves clients with no IP address. Guests reach this server for DHCP and DNS only."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "53",
+              "from": "All site VLANs",
+              "to": "Infrastructure server 10.150.60.5",
+              "note": "Common rule D: DNS to the site resolver. Without it names stop resolving and every application appears to be down."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "udp",
+              "port": "123",
+              "from": "All site VLANs except guest",
+              "to": "Infrastructure server 10.150.60.5",
+              "note": "Common rule E: NTP from the site time source. Without it clocks drift, TLS checks fail and log timestamps stop being usable as evidence."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "53,123",
+              "from": "Infrastructure server 10.150.60.5",
+              "to": "Internet",
+              "note": "Common rule F: only this server resolves names and fetches time upstream, so a single source is easy to monitor."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "22,443,161",
               "from": "NOC networks",
               "to": "Network management VLAN",
               "note": "Rule 1: NOC networks to Network management VLAN (SSH, HTTPS, SNMPv3) — Allow."
@@ -514,6 +771,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "443",
               "from": "Admin VLAN",
               "to": "HR/CRM server",
               "note": "Rule 3: Admin VLAN to HR/CRM server (HTTPS) — Allow."
@@ -521,6 +780,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "22,443",
               "from": "Software VLAN",
               "to": "Internet (cloud APIs)",
               "note": "Rule 4: Software VLAN to Internet (cloud APIs) (SSH, HTTPS) — Allow."
@@ -535,6 +796,8 @@
             {
               "action": "limit",
               "direction": "forward",
+              "proto": "any",
+              "port": "53,80,443",
               "from": "Guest VLAN",
               "to": "Internet",
               "note": "Rule 6: Guest VLAN to Internet (DNS, HTTP, HTTPS) — Allow, rate limited."
@@ -542,6 +805,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "any",
+              "port": "53,80,443",
               "from": "Corporate VLANs",
               "to": "Internet",
               "note": "Rule 7: Corporate VLANs to Internet (DNS, HTTP, HTTPS) — Allow, with filtering."
@@ -549,6 +814,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "22,443",
               "from": "Corporate VLANs",
               "to": "Istanbul servers (VPN)",
               "note": "Rule 8: Corporate VLANs to Istanbul servers (VPN) (SSH, HTTPS) — Allow."
@@ -557,8 +824,6 @@
               "action": "deny",
               "direction": "forward",
               "proto": "any",
-              "from": "any",
-              "to": "any",
               "note": "Every site ends with deny all and log."
             }
           ]
@@ -611,7 +876,7 @@
             "id": 160,
             "name": "lms-exam-servers",
             "cidr": "10.60.60.0/24",
-            "note": "LMS, exam and student-affairs servers."
+            "note": "LMS, exam and student-affairs servers. Infrastructure server 10.60.60.5 gives DHCP, DNS and NTP."
           },
           {
             "id": 170,
@@ -632,8 +897,8 @@
           {
             "id": 200,
             "name": "students",
-            "cidr": "10.64.0.0/16",
-            "note": "10,000 students, about 18,000 devices; 25 Mbps per user."
+            "cidr": "10.60.128.0/17",
+            "note": "10,000 students, about 18,000 devices (55% of 32,766 addresses); 25 Mbps per user. Upper half of the campus block, kept out of the IPsec selectors."
           }
         ]
       },
@@ -653,6 +918,7 @@
             "product": "Fortinet FortiGate 3500F",
             "vendor": "Fortinet",
             "throughputGbps": 63.0,
+            "priceUsd": 205357,
             "reason": "Selected. About 2× headroom and hardware acceleration for student sessions"
           },
           "alternatives": [
@@ -660,31 +926,90 @@
               "product": "Cisco Secure Firewall 4225",
               "vendor": "Cisco",
               "throughputGbps": 90.0,
+              "priceUsd": 241544,
               "reason": "Qualifies. Highest listed figure; natural fit for a Cisco campus"
             },
             {
               "product": "Palo Alto PA-5420",
               "vendor": "Palo Alto Networks",
               "throughputGbps": 50.0,
-              "reason": "Qualifies. Strong threat prevention; expected to cost the most at this scale"
+              "priceUsd": 142343,
+              "reason": "Qualifies. Strong threat prevention and a lower listed hardware price; less headroom than the selected 63 Gbps"
             },
             {
               "product": "Sophos XGS 8500",
               "vendor": "Sophos",
               "throughputGbps": 34.0,
+              "priceUsd": 70956,
               "reason": "Qualifies. Little headroom above the 30 Gbps link"
             },
             {
               "product": "Check Point Quantum Force 9700",
               "vendor": "Check Point",
               "throughputGbps": 16.6,
+              "priceUsd": 75851,
               "reason": "Eliminated. Below 30 Gbps"
             }
           ],
           "rules": [
             {
+              "action": "deny",
+              "direction": "forward",
+              "proto": "any",
+              "from": "Internet with a private source address",
+              "to": "Site networks",
+              "note": "Common rule A: a private source address cannot arrive from the internet, so it is spoofed. Without this rule a spoofed packet could match the internal allow rules below."
+            },
+            {
               "action": "allow",
               "direction": "forward",
+              "proto": "udp",
+              "port": "500,4500",
+              "from": "Istanbul firewall",
+              "to": "IPsec gateway on this firewall",
+              "note": "Common rule B: IKEv2 and NAT traversal for the site-to-site tunnels. Without it the sites lose their private links."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "udp",
+              "port": "67:68",
+              "from": "All site VLANs",
+              "to": "Infrastructure server 10.60.60.5",
+              "note": "Common rule C: the firewall relays DHCP to this server. Without it deny-all leaves clients with no IP address. Guests reach this server for DHCP and DNS only."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "53",
+              "from": "All site VLANs",
+              "to": "Infrastructure server 10.60.60.5",
+              "note": "Common rule D: DNS to the site resolver. Without it names stop resolving and every application appears to be down."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "udp",
+              "port": "123",
+              "from": "All site VLANs except guest",
+              "to": "Infrastructure server 10.60.60.5",
+              "note": "Common rule E: NTP from the site time source. Without it clocks drift, TLS checks fail and log timestamps stop being usable as evidence."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "53,123",
+              "from": "Infrastructure server 10.60.60.5",
+              "to": "Internet",
+              "note": "Common rule F: only this server resolves names and fetches time upstream, so a single source is easy to monitor."
+            },
+            {
+              "action": "allow",
+              "direction": "forward",
+              "proto": "any",
+              "port": "22,443,161",
               "from": "NOC networks (campus, Istanbul, Ankara)",
               "to": "Network management VLAN",
               "note": "Rule 1: NOC networks (campus, Istanbul, Ankara) to Network management VLAN (SSH, HTTPS, SNMPv3) — Allow."
@@ -692,6 +1017,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "443",
               "from": "Students, labs",
               "to": "LMS and exam servers",
               "note": "Rule 2: Students, labs to LMS and exam servers (HTTPS) — Allow, top priority."
@@ -720,6 +1047,8 @@
             {
               "action": "limit",
               "direction": "forward",
+              "proto": "any",
+              "port": "53,80,443",
               "from": "Students, labs",
               "to": "Internet",
               "note": "Rule 6: Students, labs to Internet (DNS, HTTP, HTTPS) — Allow, 25 Mbps per user."
@@ -727,6 +1056,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "443,8443",
               "from": "Faculty",
               "to": "LMS and exam administration",
               "note": "Rule 7: Faculty to LMS and exam administration (HTTPS, 8443) — Allow."
@@ -734,6 +1065,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "443",
               "from": "Admin staff",
               "to": "Student affairs system",
               "note": "Rule 8: Admin staff to Student affairs system (HTTPS) — Allow."
@@ -741,6 +1074,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "tcp",
+              "port": "22,443",
               "from": "Corporate VLANs",
               "to": "Istanbul servers (VPN)",
               "note": "Rule 9: Corporate VLANs to Istanbul servers (VPN) (SSH, HTTPS) — Allow."
@@ -755,6 +1090,8 @@
             {
               "action": "allow",
               "direction": "forward",
+              "proto": "any",
+              "port": "53,80,443",
               "from": "Corporate and guest VLANs",
               "to": "Internet",
               "note": "Rule 11: Corporate and guest VLANs to Internet (DNS, HTTP, HTTPS) — Allow, with filtering."
@@ -763,8 +1100,6 @@
               "action": "deny",
               "direction": "forward",
               "proto": "any",
-              "from": "any",
-              "to": "any",
               "note": "Every site ends with deny all and log."
             }
           ]
@@ -773,14 +1108,22 @@
     }
   ],
   "remoteAccess": {
-    "type": "site-to-site-vpn",
-    "note": "IPsec between all sites with Istanbul as VPN hub; every site accepts IPsec from the others as its second rule; network management VLANs are reachable only from the NOC networks."
+    "type": "role-based-vpn",
+    "note": "Role-based IKEv2 VPN on the Istanbul firewall with a certificate, MFA and directory groups: admins reach network management VLANs, developers reach Git and CI/CD, staff reach ERP. No SSH from the internet. Separately, IPsec links all sites with Istanbul as VPN hub; every site accepts IPsec from the others as common rule B."
   },
   "monitoring": {
-    "siem": "FortiAnalyzer and SIEM for logs and correlation, Prometheus + Grafana for health and capacity, NetFlow/IPFIX for flows, SOAR limited to alerts, failover to backup link and temporary single-IP quarantine.",
-    "owner": "NOC (5 operators) and SOC (5 Tier 1, 3 Tier 2) staffed in three shifts from Istanbul with Ankara as backup; firewall engineers (3) change rules only with a ticket and a second approver; 2 incident managers; 2 security manager/DPO roles for KVKK and UK-GDPR.",
+    "siem": "FortiAnalyzer and SIEM for logs and correlation, Prometheus + Grafana for health and capacity, NetFlow/IPFIX for flows, SOAR limited to alerts, failover to backup link and temporary single-IP quarantine. Logs stay online for 90 days and in the archive for 2 years; Law 5651 logs are signed daily with a timestamp; London logs are kept separately. Cloudflare WAF events reach the SIEM through Logpush.",
+    "owner": "NOC (5 operators) and SOC (5 Tier 1, 3 Tier 2) staffed in three shifts from Istanbul with Ankara as backup; firewall engineers (3) change rules only with a ticket and a second approver; 2 incident managers; 2 security manager/DPO roles for KVKK and UK-GDPR. Firewall engineers patch FortiOS, FortiManager and FortiAnalyzer in a monthly window, and within 72 hours for a vulnerability under active exploitation, following Fortinet PSIRT advisories.",
     "alertSink": "Ticket system fed by SIEM (SOC) and Prometheus (NOC); critical alerts get a 15-minute first response.",
     "appVsSecurity": "NOC watches links, VPN, HA and capacity; SOC watches attacks; neither can change permanent rules, which belong to the firewall engineers."
   },
-  "slug": "mt-technology-group"
+  "slug": "mt-technology-group",
+  "cveWatch": [
+    {
+      "id": "CVE-2026-24858",
+      "product": "FortiOS, FortiManager, FortiAnalyzer (FortiCloud SSO)",
+      "status": "patched",
+      "note": "Mitigation: admin login through FortiCloud SSO stays off at device registration (admin-forticloud-sso-login disable). Permanent fix: the go-live baseline is at or above the fixed versions in advisory FG-IR-26-060 (FortiOS 7.4.11 or 7.6.6; FortiManager and FortiAnalyzer 7.4.10 or 7.6.6). In CISA KEV since 2026-01-27."
+    }
+  ]
 }
