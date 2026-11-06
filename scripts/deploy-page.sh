@@ -69,7 +69,7 @@ if [ -n "$BASE" ]; then
   export BASE
   find "$OUT" -type f \( -name '*.html' -o -name '*.js' -o -name '*.css' \) -print0 |
     xargs -0 perl -pi -e '
-      s!(["\x27`(=}])/(tr|firewall|android|labs|jobs|contribute|legal|apk-lab|favicon\.svg|_astro)(?=[/"\x27`#?)\s>])!$1$ENV{BASE}/$2!g;
+      s!(["\x27`(=])/(tr|firewall|android|labs|jobs|contribute|legal|apk-lab|favicon\.svg|_astro)(?=[/"\x27`#?)\s>])!$1$ENV{BASE}/$2!g;
       s{(href=["\x27]|href:\s*["\x27])/(?=["\x27])}{$1$ENV{BASE}/}g;
     '
 fi

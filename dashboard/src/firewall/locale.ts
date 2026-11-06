@@ -19,7 +19,7 @@ export const ruleDirection = (direction: RuleDirection, locale: FirewallLocale) 
 export const cveStatus = (status: string, locale: FirewallLocale) => locale === "tr" ? (statuses[status] ?? status) : status;
 
 export const firewallPath = (locale: FirewallLocale, slug?: string) =>
-  `${locale === "tr" ? "/tr" : ""}/firewall/${slug ? `${slug}/` : ""}`;
+  `${locale === "tr" ? "/tr/firewall/" : "/firewall/"}${slug ? `${slug}/` : ""}`;
 
 export const copy = {
   en: {
