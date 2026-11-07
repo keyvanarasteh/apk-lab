@@ -1175,10 +1175,10 @@
       "priceUsd": 765,
       "ruleCount": 10,
       "actions": {
-        "allow": 7,
+        "allow": 6,
         "deny": 3,
         "reject": 0,
-        "limit": 0
+        "limit": 1
       },
       "alternativesCount": 4,
       "alternatives": [

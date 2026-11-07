@@ -102,7 +102,7 @@ Gereken hız = Kişi sayısı × Kişi başı hız × Eşzamanlılık
 |------|--------:|---------:|--------:|----------:|
 | Ankara | 642 Mbps | 803 Mbps | 1 Gbps | 500 Mbps |
 | İstanbul | 271 Mbps | 339 Mbps | 500 Mbps | 200 Mbps |
-| Londra | 70 Mbps | 87 Mbps | 200 Mbps | 4G/5G modem |
+| Londra | 90 Mbps | 112 Mbps | 200 Mbps | 4G/5G modem |
 | Akademik | 4.108 Mbps | 5.134 Mbps | 10 Gbps | 1 Gbps |
 | Yazılım | 571 Mbps | 713 Mbps | 1 Gbps | 500 Mbps |
 | Ar-Ge | 216 Mbps | 270 Mbps | 500 Mbps | 200 Mbps |
@@ -117,7 +117,7 @@ Yedek hat küçük olduğu için çoğu şubede ihtiyacın tamamını karşılam
 |------|---------------------|-----------------------|
 | Ankara | Hayır (642 / 500 Mbps) | Şubelerin VPN bağlantıları ve sunucular önce geçer, toplantılar ve indirmeler yavaşlar |
 | İstanbul | Hayır (271 / 200 Mbps) | Misafir Wi-Fi'ı kapanır |
-| Londra | Kısmen (4G/5G) | Sadece e-posta ve VPN çalışır, video engellenir |
+| Londra | Kısmen (4G/5G) | Misafir Wi-Fi'ı kapanır. Sadece e-posta ve VPN çalışır, video engellenir |
 | Akademik | Hayır (4.108 / 1.000 Mbps) | Sadece hocalar, personel ve sınav sistemi internete çıkar. Öğrenci Wi-Fi'ı durur |
 | Yazılım | Hemen hemen (571 / 500 Mbps) | Büyük indirmeler biraz yavaşlar |
 | Ar-Ge | Hemen hemen (216 / 200 Mbps) | Büyük yedeklemeler geceye ertelenir |
@@ -394,15 +394,18 @@ Yurt dışı satış ofisi. Küçük bir ekip.
 |------|-----:|----------:|-------------:|--------:|
 | Personel | 35 | 2 Mbps | %80 | 56 Mbps |
 | Teknik (BT) | 3 | 5 Mbps | %90 | 13,5 Mbps |
-| **Toplam** | | | | **~70 Mbps** |
+| Misafir Wi-Fi | - | - | - | 20 Mbps |
+| **Toplam** | | | | **~90 Mbps** |
 
-**Neden 100 değil de 200 Mbps?** 87 Mbps, 100 Mbps'lik hatta neredeyse sınıra dayanır. Fiyat farkı da az.
+**Neden 100 değil de 200 Mbps?** 112 Mbps, 100 Mbps'lik hatta sığmaz. Fiyat farkı da az.
+
+**Misafir Wi-Fi'ı neden sınırlı?** Misafir Wi-Fi'ını toplam 20 Mbps ile sınırlıyoruz, böylece misafirler çalışanların internetini yavaşlatamaz.
 
 **Yedek hat neden 4G/5G modem?** Ofis küçük. Arıza anında e-posta ve VPN çalışsın yeter. İkinci bir fiber hat bu ofis için pahalı olur.
 
 ## En uygun 5 güvenlik duvarı
 
-**İhtiyaç:** 87 Mbps (ana hat 200 Mbps). BT ekibi sadece 3 kişi. Ankara'dan uzaktan yönetilmeli.  
+**İhtiyaç:** 112 Mbps (ana hat 200 Mbps). BT ekibi sadece 3 kişi. Ankara'dan uzaktan yönetilmeli.  
 **Kural:** Tehdit koruma hızı ≥ 200 Mbps.
 
 | # | Cihaz | Tehdit koruma hızı | Neden bu sırada? |

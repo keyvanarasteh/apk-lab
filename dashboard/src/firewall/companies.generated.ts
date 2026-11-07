@@ -3965,7 +3965,8 @@ export const COMPANIES: Company[] = [
           "upMbps": 200,
           "drivers": [
             "e-mail",
-            "VPN to Ankara"
+            "VPN to Ankara",
+            "guest Wi-Fi"
           ]
         },
         "firewalls": [
@@ -4062,13 +4063,13 @@ export const COMPANIES: Company[] = [
                 "note": "IoT devices cannot reach the internet or staff PCs."
               },
               {
-                "action": "allow",
+                "action": "limit",
                 "direction": "out",
                 "proto": "tcp",
                 "port": "80,443",
                 "from": "vlan50-guest",
                 "to": "internet",
-                "note": "Guests get web access only; the deny rule above keeps them away from the company network."
+                "note": "Guests get web access only, 20 Mbps in total, so they cannot fill the office line; the deny rule above keeps them away from the company network."
               },
               {
                 "action": "allow",
