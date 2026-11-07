@@ -4,21 +4,21 @@
     "companies": 15,
     "branches": 62,
     "firewalls": 71,
-    "rules": 1300,
+    "rules": 1323,
     "priceUsd": {
       "min": 0,
       "max": 205357,
       "total": 982294
     },
     "chosenByVendor": {
-      "Fortinet": 49,
+      "Fortinet": 53,
       "Palo Alto Networks": 5,
-      "Netgate": 5,
       "Netfilter project": 5,
       "Cloudflare": 2,
       "Açık kaynak": 2,
       "WatchGuard": 1,
       "Check Point": 1,
+      "Netgate": 1,
       "Deciso (açık kaynak)": 1
     },
     "chosenByProduct": {
@@ -27,10 +27,11 @@
       "Netfilter project nftables on Kali Linux (central router/firewall)": 5,
       "Fortinet FortiGate 100F": 4,
       "Fortinet FortiGate 200F (HA)": 4,
-      "Netgate pfSense CE 2.9": 4,
       "Fortinet FortiGate 600F": 3,
       "Fortinet FortiGate 3500F (HA)": 2,
       "Açık kaynak ModSecurity + OWASP Core Rule Set (Nginx, iki sunucu, aktif-pasif)": 2,
+      "Fortinet FortiGate 70G": 2,
+      "Fortinet FortiGate 90G": 2,
       "Fortinet Fortinet FortiGate 200F": 2,
       "Palo Alto Networks Palo Alto PA-5420": 2,
       "Fortinet FortiGate 600F (HA)": 1,
@@ -42,7 +43,6 @@
       "WatchGuard Firebox T-series": 1,
       "Fortinet FortiGate 200G": 1,
       "Fortinet FortiGate 120G": 1,
-      "Fortinet FortiGate 70G": 1,
       "Fortinet FortiGate 900G": 1,
       "Fortinet FortiGate 80F (HA çifti, aktif-pasif)": 1,
       "Fortinet FortiGate 200G (HA çifti, aktif-pasif)": 1,
@@ -51,8 +51,9 @@
       "Fortinet FortiGate 900G (HA çifti, aktif-pasif)": 1,
       "Fortinet FortiGate 200G (HA çifti, iç segmentasyon)": 1,
       "Fortinet FortiGate 100F (HA)": 1,
-      "Fortinet FortiGate 90G": 1,
       "Check Point Check Point Quantum Spark 1800": 1,
+      "Fortinet FortiGate 120G (2 × HA, aktif-pasif)": 1,
+      "Fortinet FortiGate 900G (2 × HA, aktif-pasif)": 1,
       "Fortinet FortiGate 400F (HA)": 1,
       "Palo Alto Networks Palo Alto Networks PA-5410": 1,
       "Fortinet Fortinet FortiGate 1000F": 1,
@@ -69,11 +70,11 @@
     "vendorsConsidered": {
       "Fortinet": 77,
       "Palo Alto Networks": 55,
-      "Check Point": 50,
-      "Sophos": 42,
-      "Cisco": 40,
-      "Netgate": 23,
-      "Deciso": 18,
+      "Check Point": 54,
+      "Sophos": 46,
+      "Cisco": 38,
+      "Netgate": 20,
+      "Deciso": 15,
       "WatchGuard": 5,
       "Juniper": 5,
       "Netfilter project": 5,
@@ -1869,95 +1870,46 @@
       "companySlug": "k1-fw-cok-lokasyonlu-ag",
       "sector": "Education / Software",
       "author": "H*** A*** K***",
-      "branch": "Ankara HQ (VPN hub)",
+      "branch": "Ankara Ofisi (genel merkez, VPN hub)",
       "branchId": "ankara-hq",
       "branchRole": "headquarters",
-      "location": "Ankara, Turkey",
+      "location": "Ankara, Türkiye",
       "segment": "perimeter",
-      "product": "pfSense CE 2.9",
-      "vendor": "Netgate",
-      "throughputGbps": null,
-      "priceUsd": null,
-      "ruleCount": 27,
-      "actions": {
-        "allow": 17,
-        "deny": 10,
-        "reject": 0,
-        "limit": 0
-      },
-      "alternativesCount": 4,
-      "alternatives": [
-        {
-          "product": "OPNsense 26.7",
-          "vendor": "Deciso",
-          "throughputGbps": null,
-          "priceUsd": null
-        },
-        {
-          "product": "FortiGate-VM (permanent trial)",
-          "vendor": "Fortinet",
-          "throughputGbps": null,
-          "priceUsd": null
-        },
-        {
-          "product": "VM-Series (30-day trial)",
-          "vendor": "Palo Alto Networks",
-          "throughputGbps": null,
-          "priceUsd": null
-        },
-        {
-          "product": "Cisco ASA (Packet Tracer)",
-          "vendor": "Cisco",
-          "throughputGbps": null,
-          "priceUsd": null
-        }
-      ]
-    },
-    {
-      "company": "K1-FW — Çok Lokasyonlu Kurumsal Ağ ve Güvenlik Duvarı",
-      "companySlug": "k1-fw-cok-lokasyonlu-ag",
-      "sector": "Education / Software",
-      "author": "H*** A*** K***",
-      "branch": "Istanbul Office and Software",
-      "branchId": "istanbul-office",
-      "branchRole": "branch",
-      "location": "Istanbul, Turkey",
-      "segment": "perimeter",
-      "product": "pfSense CE 2.9",
-      "vendor": "Netgate",
-      "throughputGbps": null,
+      "product": "FortiGate 120G (2 × HA, aktif-pasif)",
+      "vendor": "Fortinet",
+      "throughputGbps": 2.8,
       "priceUsd": null,
       "ruleCount": 35,
       "actions": {
-        "allow": 23,
-        "deny": 12,
+        "allow": 26,
+        "deny": 8,
         "reject": 0,
-        "limit": 0
+        "limit": 1
       },
       "alternativesCount": 4,
       "alternatives": [
         {
-          "product": "OPNsense 26.7",
-          "vendor": "Deciso",
-          "throughputGbps": null,
-          "priceUsd": null
-        },
-        {
-          "product": "FortiGate-VM (permanent trial)",
-          "vendor": "Fortinet",
-          "throughputGbps": null,
-          "priceUsd": null
-        },
-        {
-          "product": "VM-Series (30-day trial)",
+          "product": "PA-1410",
           "vendor": "Palo Alto Networks",
-          "throughputGbps": null,
+          "throughputGbps": 4.5,
           "priceUsd": null
         },
         {
-          "product": "Cisco ASA (Packet Tracer)",
+          "product": "Secure Firewall 1230",
           "vendor": "Cisco",
-          "throughputGbps": null,
+          "throughputGbps": 9,
+          "priceUsd": null
+        },
+        {
+          "product": "Quantum Spark 1900",
+          "vendor": "Check Point",
+          "throughputGbps": 4,
+          "priceUsd": null
+        },
+        {
+          "product": "XGS 2300",
+          "vendor": "Sophos",
+          "throughputGbps": 5.9,
           "priceUsd": null
         }
       ]
@@ -1967,95 +1919,144 @@
       "companySlug": "k1-fw-cok-lokasyonlu-ag",
       "sector": "Education / Software",
       "author": "H*** A*** K***",
-      "branch": "London Office",
-      "branchId": "london-office",
+      "branch": "İstanbul Ofisi (yazılım ekibi)",
+      "branchId": "istanbul-office",
       "branchRole": "branch",
-      "location": "London, United Kingdom",
+      "location": "İstanbul, Türkiye",
       "segment": "perimeter",
-      "product": "pfSense CE 2.9",
-      "vendor": "Netgate",
-      "throughputGbps": null,
-      "priceUsd": null,
-      "ruleCount": 27,
-      "actions": {
-        "allow": 17,
-        "deny": 10,
-        "reject": 0,
-        "limit": 0
-      },
-      "alternativesCount": 4,
-      "alternatives": [
-        {
-          "product": "OPNsense 26.7",
-          "vendor": "Deciso",
-          "throughputGbps": null,
-          "priceUsd": null
-        },
-        {
-          "product": "FortiGate-VM (permanent trial)",
-          "vendor": "Fortinet",
-          "throughputGbps": null,
-          "priceUsd": null
-        },
-        {
-          "product": "VM-Series (30-day trial)",
-          "vendor": "Palo Alto Networks",
-          "throughputGbps": null,
-          "priceUsd": null
-        },
-        {
-          "product": "Cisco ASA (Packet Tracer)",
-          "vendor": "Cisco",
-          "throughputGbps": null,
-          "priceUsd": null
-        }
-      ]
-    },
-    {
-      "company": "K1-FW — Çok Lokasyonlu Kurumsal Ağ ve Güvenlik Duvarı",
-      "companySlug": "k1-fw-cok-lokasyonlu-ag",
-      "sector": "Education / Software",
-      "author": "H*** A*** K***",
-      "branch": "Academic Campus",
-      "branchId": "academic-campus",
-      "branchRole": "campus",
-      "location": "Ankara, Turkey",
-      "segment": "perimeter",
-      "product": "pfSense CE 2.9",
-      "vendor": "Netgate",
-      "throughputGbps": null,
+      "product": "FortiGate 90G",
+      "vendor": "Fortinet",
+      "throughputGbps": 2.2,
       "priceUsd": null,
       "ruleCount": 40,
       "actions": {
-        "allow": 26,
-        "deny": 14,
+        "allow": 28,
+        "deny": 10,
         "reject": 0,
-        "limit": 0
+        "limit": 2
       },
       "alternativesCount": 4,
       "alternatives": [
         {
-          "product": "OPNsense 26.7",
-          "vendor": "Deciso",
-          "throughputGbps": null,
-          "priceUsd": null
-        },
-        {
-          "product": "FortiGate-VM (permanent trial)",
-          "vendor": "Fortinet",
-          "throughputGbps": null,
-          "priceUsd": null
-        },
-        {
-          "product": "VM-Series (30-day trial)",
+          "product": "PA-1410",
           "vendor": "Palo Alto Networks",
-          "throughputGbps": null,
+          "throughputGbps": 4.5,
           "priceUsd": null
         },
         {
-          "product": "Cisco ASA (Packet Tracer)",
-          "vendor": "Cisco",
+          "product": "XGS 2300",
+          "vendor": "Sophos",
+          "throughputGbps": 5.9,
+          "priceUsd": null
+        },
+        {
+          "product": "Quantum Spark 1900",
+          "vendor": "Check Point",
+          "throughputGbps": 4,
+          "priceUsd": null
+        },
+        {
+          "product": "OPNsense DEC3850 v2",
+          "vendor": "Deciso",
+          "throughputGbps": 2,
+          "priceUsd": null
+        }
+      ]
+    },
+    {
+      "company": "K1-FW — Çok Lokasyonlu Kurumsal Ağ ve Güvenlik Duvarı",
+      "companySlug": "k1-fw-cok-lokasyonlu-ag",
+      "sector": "Education / Software",
+      "author": "H*** A*** K***",
+      "branch": "Londra Ofisi (satış/temsilcilik)",
+      "branchId": "london-office",
+      "branchRole": "branch",
+      "location": "Londra, Birleşik Krallık",
+      "segment": "perimeter",
+      "product": "FortiGate 70G",
+      "vendor": "Fortinet",
+      "throughputGbps": 1.3,
+      "priceUsd": null,
+      "ruleCount": 29,
+      "actions": {
+        "allow": 21,
+        "deny": 7,
+        "reject": 0,
+        "limit": 1
+      },
+      "alternativesCount": 4,
+      "alternatives": [
+        {
+          "product": "PA-445",
+          "vendor": "Palo Alto Networks",
+          "throughputGbps": 1.25,
+          "priceUsd": null
+        },
+        {
+          "product": "XGS 118",
+          "vendor": "Sophos",
+          "throughputGbps": 3.25,
+          "priceUsd": null
+        },
+        {
+          "product": "Quantum Spark 1900",
+          "vendor": "Check Point",
+          "throughputGbps": 4,
+          "priceUsd": null
+        },
+        {
+          "product": "Netgate 4200 (pfSense Plus)",
+          "vendor": "Netgate",
           "throughputGbps": null,
+          "priceUsd": null
+        }
+      ]
+    },
+    {
+      "company": "K1-FW — Çok Lokasyonlu Kurumsal Ağ ve Güvenlik Duvarı",
+      "companySlug": "k1-fw-cok-lokasyonlu-ag",
+      "sector": "Education / Software",
+      "author": "H*** A*** K***",
+      "branch": "Akademik Kampüs (Ar-Ge ekibi dahil)",
+      "branchId": "academic-campus",
+      "branchRole": "campus",
+      "location": "Türkiye (şehir senaryoda belirtilmedi)",
+      "segment": "perimeter",
+      "product": "FortiGate 900G (2 × HA, aktif-pasif)",
+      "vendor": "Fortinet",
+      "throughputGbps": 30,
+      "priceUsd": null,
+      "ruleCount": 48,
+      "actions": {
+        "allow": 32,
+        "deny": 14,
+        "reject": 0,
+        "limit": 2
+      },
+      "alternativesCount": 4,
+      "alternatives": [
+        {
+          "product": "PA-3430",
+          "vendor": "Palo Alto Networks",
+          "throughputGbps": 15,
+          "priceUsd": null
+        },
+        {
+          "product": "Secure Firewall 4215",
+          "vendor": "Cisco",
+          "throughputGbps": 65,
+          "priceUsd": null
+        },
+        {
+          "product": "Quantum Force 19100",
+          "vendor": "Check Point",
+          "throughputGbps": 35,
+          "priceUsd": null
+        },
+        {
+          "product": "XGS 4300",
+          "vendor": "Sophos",
+          "throughputGbps": 28,
           "priceUsd": null
         }
       ]
