@@ -1,29 +1,29 @@
 {
   "generatedBy": "firewall-lab/scripts/catalog.py",
   "summary": {
-    "companies": 15,
-    "branches": 62,
-    "firewalls": 71,
-    "rules": 1300,
+    "companies": 16,
+    "branches": 66,
+    "firewalls": 79,
+    "rules": 1366,
     "priceUsd": {
       "min": 0,
       "max": 205357,
-      "total": 982294
+      "total": 1051494
     },
     "chosenByVendor": {
-      "Fortinet": 49,
+      "Fortinet": 55,
       "Palo Alto Networks": 5,
       "Netgate": 5,
       "Netfilter project": 5,
-      "Cloudflare": 2,
+      "Cloudflare": 4,
       "Açık kaynak": 2,
       "WatchGuard": 1,
       "Check Point": 1,
       "Deciso (açık kaynak)": 1
     },
     "chosenByProduct": {
-      "Fortinet FortiGate 60F": 6,
-      "Fortinet FortiGate 200F": 5,
+      "Fortinet FortiGate 60F": 8,
+      "Fortinet FortiGate 200F": 7,
       "Netfilter project nftables on Kali Linux (central router/firewall)": 5,
       "Fortinet FortiGate 100F": 4,
       "Fortinet FortiGate 200F (HA)": 4,
@@ -31,7 +31,9 @@
       "Fortinet FortiGate 600F": 3,
       "Fortinet FortiGate 3500F (HA)": 2,
       "Açık kaynak ModSecurity + OWASP Core Rule Set (Nginx, iki sunucu, aktif-pasif)": 2,
+      "Fortinet FortiGate 900G": 2,
       "Fortinet Fortinet FortiGate 200F": 2,
+      "Cloudflare Cloudflare WAF (Business)": 2,
       "Palo Alto Networks Palo Alto PA-5420": 2,
       "Fortinet FortiGate 600F (HA)": 1,
       "Palo Alto Networks PA-3400 series (HA)": 1,
@@ -43,7 +45,6 @@
       "Fortinet FortiGate 200G": 1,
       "Fortinet FortiGate 120G": 1,
       "Fortinet FortiGate 70G": 1,
-      "Fortinet FortiGate 900G": 1,
       "Fortinet FortiGate 80F (HA çifti, aktif-pasif)": 1,
       "Fortinet FortiGate 200G (HA çifti, aktif-pasif)": 1,
       "Cloudflare Cloudflare Business (WAF + DDoS + Bot) — 3 alan adı": 1,
@@ -61,36 +62,38 @@
       "Fortinet Fortinet FortiGate 400F": 1,
       "Fortinet Fortinet FortiGate 3500F": 1,
       "Netgate pfSense Plus (Netgate 4200)": 1,
+      "Fortinet FortiGate 1000F": 1,
       "Fortinet FortiGate 80F": 1,
       "Fortinet FortiGate-VM08 (AWS)": 1,
       "Fortinet FortiGate 200F (ISFW)": 1,
       "Deciso (açık kaynak) OPNsense (Deciso DEC3800)": 1
     },
     "vendorsConsidered": {
-      "Fortinet": 77,
-      "Palo Alto Networks": 55,
-      "Check Point": 50,
-      "Sophos": 42,
-      "Cisco": 40,
-      "Netgate": 23,
-      "Deciso": 18,
+      "Fortinet": 86,
+      "Palo Alto Networks": 60,
+      "Check Point": 56,
+      "Sophos": 48,
+      "Cisco": 44,
+      "Netgate": 24,
+      "Deciso": 19,
+      "Cloudflare": 6,
+      "F5": 6,
       "WatchGuard": 5,
       "Juniper": 5,
       "Netfilter project": 5,
-      "Cloudflare": 4,
-      "F5": 4,
+      "Imperva": 3,
       "SonicWall": 3,
       "Palo Alto": 2,
       "MikroTik": 2,
       "Ubiquiti": 2,
       "Açık kaynak": 2,
       "Barracuda": 2,
+      "OWASP": 2,
       "Juniper Networks": 2,
       "Deciso (açık kaynak)": 2,
       "Netgate / Deciso": 1,
       "Amazon": 1,
       "Akamai": 1,
-      "Imperva": 1,
       "OWASP / açık kaynak": 1,
       "Imperva (Thales)": 1,
       "Forcepoint": 1,
@@ -2939,6 +2942,398 @@
           "vendor": "Sophos",
           "throughputGbps": 7,
           "priceUsd": 750
+        }
+      ]
+    },
+    {
+      "company": "Nraphy",
+      "companySlug": "nraphy",
+      "sector": "Education",
+      "author": "Rauf Fatih Kaya",
+      "branch": "İstanbul Ofisi (Genel Merkez)",
+      "branchId": "istanbul-hq",
+      "branchRole": "headquarters",
+      "location": "İstanbul, TR",
+      "segment": "perimeter",
+      "product": "FortiGate 200F",
+      "vendor": "Fortinet",
+      "throughputGbps": 3.0,
+      "priceUsd": 5500,
+      "ruleCount": 13,
+      "actions": {
+        "allow": 7,
+        "deny": 5,
+        "reject": 0,
+        "limit": 1
+      },
+      "alternativesCount": 4,
+      "alternatives": [
+        {
+          "product": "PA-1410",
+          "vendor": "Palo Alto Networks",
+          "throughputGbps": 4.0,
+          "priceUsd": 18000
+        },
+        {
+          "product": "XGS 3300",
+          "vendor": "Sophos",
+          "throughputGbps": 2.5,
+          "priceUsd": 7000
+        },
+        {
+          "product": "Quantum 6200",
+          "vendor": "Check Point",
+          "throughputGbps": 3.0,
+          "priceUsd": 9000
+        },
+        {
+          "product": "Secure Firewall 1210CE",
+          "vendor": "Cisco",
+          "throughputGbps": 1.5,
+          "priceUsd": 3200
+        }
+      ]
+    },
+    {
+      "company": "Nraphy",
+      "companySlug": "nraphy",
+      "sector": "Education",
+      "author": "Rauf Fatih Kaya",
+      "branch": "İstanbul Ofisi (Genel Merkez)",
+      "branchId": "istanbul-hq",
+      "branchRole": "headquarters",
+      "location": "İstanbul, TR",
+      "segment": "dmz-waf",
+      "product": "Cloudflare WAF (Business)",
+      "vendor": "Cloudflare",
+      "throughputGbps": null,
+      "priceUsd": 2400,
+      "ruleCount": 4,
+      "actions": {
+        "allow": 2,
+        "deny": 2,
+        "reject": 0,
+        "limit": 0
+      },
+      "alternativesCount": 4,
+      "alternatives": [
+        {
+          "product": "ModSecurity + OWASP CRS",
+          "vendor": "OWASP",
+          "throughputGbps": null,
+          "priceUsd": 0
+        },
+        {
+          "product": "FortiWeb VM",
+          "vendor": "Fortinet",
+          "throughputGbps": null,
+          "priceUsd": 6000
+        },
+        {
+          "product": "BIG-IP Advanced WAF",
+          "vendor": "F5",
+          "throughputGbps": null,
+          "priceUsd": 25000
+        },
+        {
+          "product": "Cloud WAF",
+          "vendor": "Imperva",
+          "throughputGbps": null,
+          "priceUsd": 12000
+        }
+      ]
+    },
+    {
+      "company": "Nraphy",
+      "companySlug": "nraphy",
+      "sector": "Education",
+      "author": "Rauf Fatih Kaya",
+      "branch": "İstanbul Ofisi (Genel Merkez)",
+      "branchId": "istanbul-hq",
+      "branchRole": "headquarters",
+      "location": "İstanbul, TR",
+      "segment": "rnd-software",
+      "product": "FortiGate 200F",
+      "vendor": "Fortinet",
+      "throughputGbps": 3.0,
+      "priceUsd": 5500,
+      "ruleCount": 6,
+      "actions": {
+        "allow": 3,
+        "deny": 3,
+        "reject": 0,
+        "limit": 0
+      },
+      "alternativesCount": 4,
+      "alternatives": [
+        {
+          "product": "PA-1410",
+          "vendor": "Palo Alto Networks",
+          "throughputGbps": 4.0,
+          "priceUsd": 18000
+        },
+        {
+          "product": "XGS 3300",
+          "vendor": "Sophos",
+          "throughputGbps": 2.5,
+          "priceUsd": 7000
+        },
+        {
+          "product": "Quantum 6200",
+          "vendor": "Check Point",
+          "throughputGbps": 3.0,
+          "priceUsd": 9000
+        },
+        {
+          "product": "pfSense Netgate 6100",
+          "vendor": "Netgate",
+          "throughputGbps": 1.5,
+          "priceUsd": 1500
+        }
+      ]
+    },
+    {
+      "company": "Nraphy",
+      "companySlug": "nraphy",
+      "sector": "Education",
+      "author": "Rauf Fatih Kaya",
+      "branch": "Ankara Ofisi",
+      "branchId": "ankara-ofisi",
+      "branchRole": "branch",
+      "location": "Ankara, TR",
+      "segment": "perimeter",
+      "product": "FortiGate 60F",
+      "vendor": "Fortinet",
+      "throughputGbps": 0.7,
+      "priceUsd": 700,
+      "ruleCount": 10,
+      "actions": {
+        "allow": 5,
+        "deny": 5,
+        "reject": 0,
+        "limit": 0
+      },
+      "alternativesCount": 4,
+      "alternatives": [
+        {
+          "product": "PA-410",
+          "vendor": "Palo Alto Networks",
+          "throughputGbps": 0.5,
+          "priceUsd": 1500
+        },
+        {
+          "product": "XGS 116",
+          "vendor": "Sophos",
+          "throughputGbps": 0.5,
+          "priceUsd": 900
+        },
+        {
+          "product": "Quantum Spark 1550",
+          "vendor": "Check Point",
+          "throughputGbps": 0.5,
+          "priceUsd": 1000
+        },
+        {
+          "product": "Secure Firewall 1010",
+          "vendor": "Cisco",
+          "throughputGbps": 0.6,
+          "priceUsd": 1100
+        }
+      ]
+    },
+    {
+      "company": "Nraphy",
+      "companySlug": "nraphy",
+      "sector": "Education",
+      "author": "Rauf Fatih Kaya",
+      "branch": "Londra Ofisi",
+      "branchId": "londra-ofisi",
+      "branchRole": "branch",
+      "location": "London, UK",
+      "segment": "perimeter",
+      "product": "FortiGate 60F",
+      "vendor": "Fortinet",
+      "throughputGbps": 0.7,
+      "priceUsd": 700,
+      "ruleCount": 10,
+      "actions": {
+        "allow": 5,
+        "deny": 5,
+        "reject": 0,
+        "limit": 0
+      },
+      "alternativesCount": 4,
+      "alternatives": [
+        {
+          "product": "FortiGate 40F",
+          "vendor": "Fortinet",
+          "throughputGbps": 0.6,
+          "priceUsd": 450
+        },
+        {
+          "product": "XGS 87",
+          "vendor": "Sophos",
+          "throughputGbps": 0.4,
+          "priceUsd": 600
+        },
+        {
+          "product": "Quantum Spark 1530",
+          "vendor": "Check Point",
+          "throughputGbps": 0.4,
+          "priceUsd": 700
+        },
+        {
+          "product": "Meraki MX68",
+          "vendor": "Cisco",
+          "throughputGbps": 0.4,
+          "priceUsd": 900
+        }
+      ]
+    },
+    {
+      "company": "Nraphy",
+      "companySlug": "nraphy",
+      "sector": "Education",
+      "author": "Rauf Fatih Kaya",
+      "branch": "Akademik Şube (10.000 öğrenci)",
+      "branchId": "akademik-sube",
+      "branchRole": "campus",
+      "location": "İstanbul, TR",
+      "segment": "perimeter",
+      "product": "FortiGate 1000F",
+      "vendor": "Fortinet",
+      "throughputGbps": 13.0,
+      "priceUsd": 30000,
+      "ruleCount": 13,
+      "actions": {
+        "allow": 6,
+        "deny": 6,
+        "reject": 0,
+        "limit": 1
+      },
+      "alternativesCount": 4,
+      "alternatives": [
+        {
+          "product": "PA-5410",
+          "vendor": "Palo Alto Networks",
+          "throughputGbps": 20.0,
+          "priceUsd": 60000
+        },
+        {
+          "product": "XGS 6500",
+          "vendor": "Sophos",
+          "throughputGbps": 15.0,
+          "priceUsd": 30000
+        },
+        {
+          "product": "Quantum 16200",
+          "vendor": "Check Point",
+          "throughputGbps": 12.0,
+          "priceUsd": 45000
+        },
+        {
+          "product": "Secure Firewall 4215",
+          "vendor": "Cisco",
+          "throughputGbps": 20.0,
+          "priceUsd": 60000
+        }
+      ]
+    },
+    {
+      "company": "Nraphy",
+      "companySlug": "nraphy",
+      "sector": "Education",
+      "author": "Rauf Fatih Kaya",
+      "branch": "Akademik Şube (10.000 öğrenci)",
+      "branchId": "akademik-sube",
+      "branchRole": "campus",
+      "location": "İstanbul, TR",
+      "segment": "dmz-waf",
+      "product": "Cloudflare WAF (Business)",
+      "vendor": "Cloudflare",
+      "throughputGbps": null,
+      "priceUsd": 2400,
+      "ruleCount": 4,
+      "actions": {
+        "allow": 2,
+        "deny": 2,
+        "reject": 0,
+        "limit": 0
+      },
+      "alternativesCount": 4,
+      "alternatives": [
+        {
+          "product": "ModSecurity + OWASP CRS",
+          "vendor": "OWASP",
+          "throughputGbps": null,
+          "priceUsd": 0
+        },
+        {
+          "product": "FortiWeb 1000F",
+          "vendor": "Fortinet",
+          "throughputGbps": null,
+          "priceUsd": 30000
+        },
+        {
+          "product": "BIG-IP Advanced WAF",
+          "vendor": "F5",
+          "throughputGbps": null,
+          "priceUsd": 40000
+        },
+        {
+          "product": "Cloud WAF",
+          "vendor": "Imperva",
+          "throughputGbps": null,
+          "priceUsd": 12000
+        }
+      ]
+    },
+    {
+      "company": "Nraphy",
+      "companySlug": "nraphy",
+      "sector": "Education",
+      "author": "Rauf Fatih Kaya",
+      "branch": "Akademik Şube (10.000 öğrenci)",
+      "branchId": "akademik-sube",
+      "branchRole": "campus",
+      "location": "İstanbul, TR",
+      "segment": "students",
+      "product": "FortiGate 900G",
+      "vendor": "Fortinet",
+      "throughputGbps": 12.0,
+      "priceUsd": 22000,
+      "ruleCount": 6,
+      "actions": {
+        "allow": 2,
+        "deny": 3,
+        "reject": 0,
+        "limit": 1
+      },
+      "alternativesCount": 4,
+      "alternatives": [
+        {
+          "product": "PA-3430",
+          "vendor": "Palo Alto Networks",
+          "throughputGbps": 10.5,
+          "priceUsd": 35000
+        },
+        {
+          "product": "XGS 5500",
+          "vendor": "Sophos",
+          "throughputGbps": 10.0,
+          "priceUsd": 20000
+        },
+        {
+          "product": "Quantum 9300",
+          "vendor": "Check Point",
+          "throughputGbps": 10.0,
+          "priceUsd": 30000
+        },
+        {
+          "product": "OPNsense DEC4280",
+          "vendor": "Deciso",
+          "throughputGbps": 8.0,
+          "priceUsd": 8000
         }
       ]
     },
